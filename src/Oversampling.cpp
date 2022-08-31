@@ -11,7 +11,8 @@ Oversampling::Oversampling(int adcbytes, int samplebytes, int Averaging)
 {
   _samplebytes = constrain(samplebytes, 11, 18);
   _adcbytes = constrain(adcbytes, 10, 12);
-  if (Averaging < 1){
+  if (Averaging < 1)
+  {
     Averaging = 1;
   }
   _Averaging = Averaging;
@@ -21,12 +22,14 @@ unsigned long Oversampling::read(int pin)
 {
   int DecimationCount = _samplebytes - _adcbytes;
   DecimationCount = constrain(DecimationCount, 1, 8);
-  int OversampleCount = 1 << DecimationCount*2;// = pow(2, DecimationCount*2);
-  
+  int OversampleCount = 1 << DecimationCount * 2; // = pow(2, DecimationCount*2);
+
   // Can Lead To Overflow
   unsigned long TotalADC = 0;
-  for (int i=0; i<_Averaging; i++){
-    for (int i=0; i<OversampleCount; i++){
+  for (int i = 0; i < _Averaging; i++)
+  {
+    for (int i = 0; i < OversampleCount; i++)
+    {
       TotalADC = TotalADC + analogRead(pin);
     }
   }
@@ -34,4 +37,23 @@ unsigned long Oversampling::read(int pin)
 
   //_Averaging
   return TotalADC;
+}
+
+void Oversampling::setParameters(int adcbytes, int samplebytes, int Averaging)
+{
+  _samplebytes = constrain(samplebytes, 11, 18);
+  _adcbytes = constrain(adcbytes, 10, 12);
+  if (Averaging < 1)
+  {
+    Averaging = 1;
+  }
+  _Averaging = Averaging;
+}
+
+int Oversampling::getSampleBytes(){
+  return _samplebytes;
+}
+
+int Oversampling::getAveraging(){
+  return _Averaging;
 }
